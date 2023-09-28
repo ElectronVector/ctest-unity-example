@@ -8,18 +8,10 @@ add_executable(c_example src/main.c
 
 enable_testing()
 
-#add_executable(test_suite_1 test/test_suite_1.c)
-#add_executable(test_suite_2 test/test_suite_2.c)
-#
-#add_test(NAME test_suite_1 COMMAND test_suite_1)
-#add_test(NAME test_suite_2 COMMAND test_suite_2)
-
 set(TEST_DIRECTORY test)
 set(TEST_FILE_PREFIX test_)
 set(SOURCE_DIRECTORY src)
 set(INCLUDE_DIRECTORY src)
-
-
 
 # Collect a list of all the test files in the test directory.
 file(GLOB TEST_FILES ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
