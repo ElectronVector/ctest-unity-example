@@ -14,8 +14,11 @@ enable_testing()
 #add_test(NAME test_suite_1 COMMAND test_suite_1)
 #add_test(NAME test_suite_2 COMMAND test_suite_2)
 
+set(TEST_DIRECTORY test)
+set(TEST_FILE_PREFIX test_)
+
 # Collect a list of all the test files in the test directory.
-file(GLOB TEST_FILES test/test_*)
+file(GLOB TEST_FILES ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
 
 # Add a new executable and test for each test file discovered.
 # TODO: Remove test_ prefix from test file to get source file name.
@@ -29,7 +32,7 @@ foreach (TEST_FILE ${TEST_FILES})
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WLE)
 
     # Remove the test filename prefix to get the module name.
-    string(REGEX REPLACE ^test_ "" MODULE_NAME ${TEST_NAME})
+    string(REGEX REPLACE ^${TEST_FILE_PREFIX} "" MODULE_NAME ${TEST_NAME})
 
     # Create a new binary and test for each module and corresponding test.
     add_executable(${TEST_NAME} ${TEST_FILE} ../src/${MODULE_NAME}.c)
