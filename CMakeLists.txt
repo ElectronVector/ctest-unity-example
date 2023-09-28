@@ -4,7 +4,7 @@ project(c_example C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(c_example src/main.c
-        src/test_suite_1.c)
+        src/suite_1.c)
 
 enable_testing()
 
@@ -27,6 +27,11 @@ file(GLOB TEST_FILES test/test_*)
 foreach (TEST_FILE ${TEST_FILES})
     MESSAGE("Discovered test file: ${TEST_FILE}")
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WLE)
-    add_executable(${TEST_NAME} ${TEST_FILE} ../src/${TEST_NAME}.c)
+
+    # Remove the test filename prefix to get the module name.
+    string(REGEX REPLACE ^test_ "" MODULE_NAME ${TEST_NAME})
+
+    # Create a new binary and test for each module and corresponding test.
+    add_executable(${TEST_NAME} ${TEST_FILE} ../src/${MODULE_NAME}.c)
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endforeach ()
