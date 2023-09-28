@@ -17,8 +17,6 @@ set(INCLUDE_DIRECTORY src)
 file(GLOB TEST_FILES ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
 
 # Add a new executable and test for each test file discovered.
-# TODO: Add some actual functions to test in example modules.
-# TODO: Compile with corresponding source files.
 # TODO: Handle nested folders.
 # TODO: Include unity for testing.
 # TODO: Skip source files that don't exist.
