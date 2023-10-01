@@ -39,3 +39,11 @@ When it is time to run the tests though, you need to run them by speficifing the
 ```
 ctest --test-dir build/test
 ```
+
+## To Do
+You can use gcc to determine module dependencies like this:
+```
+gcc -MM test\test_module_1.c -Isrc -Itest
+test_module_1.o: test\test_module_1.c src/module.h
+```
+This could be useful for automatically detecting the files to include in the test executable.
