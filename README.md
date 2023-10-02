@@ -2,6 +2,24 @@
 
 This is a simple example of a C application which can build and run unit tests with CTest.
 
+It uses [Unity](https://github.com/ThrowTheSwitch/Unity) as a test framework. 
+
+## Conventions
+This application has all of its source files in a folder called `src` and all test files in `test`.
+These can be changed in `CMakeLists.txt`.
+
+By convention, test a file named `src/module.c` by adding a test file called `test/test_module.c`.
+This file will be built and linked against the source file to execute the tests.
+The `test_` is the prefix for a test file name, but this prefix can be changed in `CMakeLists.txt`.
+
+## Adding New Modules and Tests
+Add a new module and test by creating three different files:
+- `src/<module_name>.c`
+- `src/<module_name>.h`
+- `test/test_<module_name.c>`
+
+The test file created should include 
+
 ## Running CMake
 
 The modern way to build with CMake is to create a build dir with:
