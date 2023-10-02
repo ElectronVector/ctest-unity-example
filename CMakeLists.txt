@@ -15,6 +15,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(unity)
 
+FetchContent_Declare(
+        fff
+        GIT_REPOSITORY https://github.com/meekrosoft/fff
+        GIT_TAG        v1.1
+)
+FetchContent_MakeAvailable(fff)
+
 enable_testing()
 
 set(TEST_DIRECTORY test)
@@ -42,7 +49,8 @@ foreach (TEST_FILE ${TEST_FILES})
     target_include_directories(${TEST_NAME} PRIVATE ${INCLUDE_DIRECTORY})
     # Link in the Unity library.
     target_link_libraries(${TEST_NAME} unity)
-    # Include the Unity headers.
+    # Include the Unity and fff headers.
     target_include_directories(${TEST_NAME} PRIVATE ${unity_SOURCE_DIR}/src)
+    target_include_directories(${TEST_NAME} PRIVATE ${fff_SOURCE_DIR})
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endforeach ()
