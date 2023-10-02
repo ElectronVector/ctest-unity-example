@@ -4,7 +4,7 @@ project(c_example C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(c_example src/main.c
-        src/module_1.c)
+        src/module_1.c src/module_2.c)
 
 # Download and make the Unit test framework available.
 include(FetchContent)
