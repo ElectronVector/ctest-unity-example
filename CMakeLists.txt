@@ -4,7 +4,7 @@ project(c_example C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(c_example src/main.c
-        src/module_1.c src/module_2.c)
+        src/module_1.c src/module_2.c src/module_folder/module.c src/module_folder/module.h)
 
 # Download and make the Unit test framework available.
 include(FetchContent)
@@ -30,7 +30,10 @@ set(SOURCE_DIRECTORY src)
 set(INCLUDE_DIRECTORY src)
 
 # Collect a list of all the test files in the test directory.
-file(GLOB TEST_FILES ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
+set(ABSOLUTE_TEST_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/${TEST_DIRECTORY})
+file(GLOB_RECURSE TEST_FILES RELATIVE ${ABSOLUTE_TEST_DIRECTORY_PATH} ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
+message ("TEST FILES: ${TEST_FILES}")
+message("${CMAKE_SOURCE_DIR}")
 
 # Add a new executable and test for each test file discovered.
 # TODO: Handle nested folders.
@@ -38,13 +41,14 @@ file(GLOB TEST_FILES ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
 # TODO: Skip source files that don't exist.
 foreach (TEST_FILE ${TEST_FILES})
     message("Discovered test file: ${TEST_FILE}")
-    get_filename_component(TEST_NAME ${TEST_FILE} NAME_WLE)
 
-    # Remove the test filename prefix to get the module name.
-    string(REGEX REPLACE ^${TEST_FILE_PREFIX} "" MODULE_NAME ${TEST_NAME})
+    # Remove the test filename prefix to get the path to the corresponding source file.
+    string(REGEX REPLACE ${TEST_FILE_PREFIX} "" SOURCE_FILE_PATH ${TEST_FILE})
+    cmake_path(REMOVE_EXTENSION SOURCE_FILE_PATH OUTPUT_VARIABLE MODULE_PATH)
+    string(REGEX REPLACE "/" "-" TEST_NAME ${MODULE_PATH})
 
     # Create a new binary and test for each module and corresponding test.
-    add_executable(${TEST_NAME} ${TEST_FILE} ${SOURCE_DIRECTORY}/${MODULE_NAME}.c)
+    add_executable(${TEST_NAME} test/${TEST_FILE} src/${SOURCE_FILE_PATH})
     # Include files from the include directory.
     target_include_directories(${TEST_NAME} PRIVATE ${INCLUDE_DIRECTORY})
     # Link in the Unity library.
