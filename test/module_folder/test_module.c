@@ -1,10 +1,6 @@
 #include "unity.h"
-#include "fff.h"
 
-//#include "module_1.h"
-
-//DEFINE_FFF_GLOBALS;
-//FAKE_VALUE_FUNC(int, module_2_get_int);
+#include "module_folder/module.h"
 
 void setUp(void) {
     // set stuff up here
@@ -15,7 +11,7 @@ void tearDown(void) {
 }
 
 void test_to_do() {
-    TEST_ASSERT_EQUAL_INT(9, 9);
+    TEST_ASSERT_EQUAL_INT(5, a_function());
 }
 
 int main(void) {
