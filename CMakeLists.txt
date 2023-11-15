@@ -41,30 +41,36 @@ set(ABSOLUTE_TEST_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/${TEST_DIRECTORY})
 file(GLOB_RECURSE TEST_FILES RELATIVE ${ABSOLUTE_TEST_DIRECTORY_PATH} ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
 
 # Log the test files that were found.
-message("")
-message ("Discovered test files")
+message (STATUS "Discovered test files")
 foreach(f ${TEST_FILES})
-    message("    " ${f})
+    message(STATUS "    " ${f})
 endforeach ()
-message("")
 
 # Add a new executable and test for each test file discovered.
 # TODO: Skip source files that don't exist.
 foreach (TEST_FILE ${TEST_FILES})
 
     # Remove the test filename prefix to get the path to the corresponding source file.
-    string(REGEX REPLACE ${TEST_FILE_PREFIX} "" SOURCE_FILE_PATH ${TEST_FILE})
-    cmake_path(REMOVE_EXTENSION SOURCE_FILE_PATH OUTPUT_VARIABLE MODULE_PATH)
-    string(REGEX REPLACE "/" "-" TEST_NAME ${MODULE_PATH})
+    string(REGEX REPLACE ${TEST_FILE_PREFIX} "" SOURCE_FILE ${TEST_FILE})
+    cmake_path(REMOVE_EXTENSION SOURCE_FILE OUTPUT_VARIABLE MODULE_PATH)
 
-    # Create a new binary and test for each module and corresponding test.
-    add_executable(${TEST_NAME} test/${TEST_FILE} src/${SOURCE_FILE_PATH})
+    # Convert slashes to hyphens to generate a unique name for the test.
+    string(REGEX REPLACE "/" "-" MODULE_TEST_NAME ${MODULE_PATH})
+
+    # Create a new executable binary for each module test.
+    add_executable(${MODULE_TEST_NAME} test/${TEST_FILE} src/${SOURCE_FILE})
+
     # Include files from the include directory.
-    target_include_directories(${TEST_NAME} PRIVATE ${INCLUDE_DIRECTORY})
+    target_include_directories(${MODULE_TEST_NAME} PRIVATE ${INCLUDE_DIRECTORY})
+
     # Link in the Unity library.
-    target_link_libraries(${TEST_NAME} unity)
+    target_link_libraries(${MODULE_TEST_NAME} unity)
+
     # Include the Unity and fff headers.
-    target_include_directories(${TEST_NAME} PRIVATE ${unity_SOURCE_DIR}/src)
-    target_include_directories(${TEST_NAME} PRIVATE ${fff_SOURCE_DIR})
-    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+    target_include_directories(${MODULE_TEST_NAME} PRIVATE ${unity_SOURCE_DIR}/src)
+    target_include_directories(${MODULE_TEST_NAME} PRIVATE ${fff_SOURCE_DIR})
+
+    # Add the test so it can be run with CTest.
+    add_test(NAME ${MODULE_TEST_NAME} COMMAND ${MODULE_TEST_NAME})
+    message(STATUS "Added test: " ${MODULE_TEST_NAME})
 endforeach ()
