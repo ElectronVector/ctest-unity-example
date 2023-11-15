@@ -1,4 +1,4 @@
-# CTest Example
+# CTest Unity Example
 
 This is a simple example of a C application which can build and run unit tests with CTest.
 
