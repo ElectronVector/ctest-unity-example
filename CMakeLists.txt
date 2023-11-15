@@ -47,7 +47,6 @@ foreach(f ${TEST_FILES})
 endforeach ()
 
 # Add a new executable and test for each test file discovered.
-# TODO: Skip source files that don't exist.
 foreach (TEST_FILE ${TEST_FILES})
 
     # Remove the test filename prefix to get the path to the corresponding source file.
@@ -57,14 +56,12 @@ foreach (TEST_FILE ${TEST_FILES})
     # Convert slashes to hyphens to generate a unique name for the test.
     string(REGEX REPLACE "/" "-" MODULE_TEST_NAME ${MODULE_PATH})
 
-    # Create a new executable binary for each module test.
+    # Create a new executable binary for each module test. Don't add the source file if it doesn't exist.
+    set(SOURCE_FILE_IF_IT_EXISTS "")
     if(EXISTS ${PROJECT_SOURCE_DIR}/src/${SOURCE_FILE})
-        add_executable(${MODULE_TEST_NAME} test/${TEST_FILE} src/${SOURCE_FILE})
-        message("source file exists")
-    else()
-        add_executable(${MODULE_TEST_NAME} test/${TEST_FILE})
-        message("source file does not exist")
+        set(SOURCE_FILE_IF_IT_EXISTS src/${SOURCE_FILE})
     endif()
+    add_executable(${MODULE_TEST_NAME} test/${TEST_FILE} ${SOURCE_FILE_IF_IT_EXISTS})
 
     # Include files from the include directory.
     target_include_directories(${MODULE_TEST_NAME} PRIVATE ${INCLUDE_DIRECTORY})
