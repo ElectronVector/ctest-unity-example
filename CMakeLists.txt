@@ -3,6 +3,8 @@ project(c_example C)
 
 set(CMAKE_C_STANDARD 11)
 
+include(CMakePrintHelpers)
+
 add_executable(c_example src/main.c
         src/module_1.c src/module_2.c src/module_folder/module.c src/module_folder/module.h)
 
@@ -29,16 +31,26 @@ set(TEST_FILE_PREFIX test_)
 set(SOURCE_DIRECTORY src)
 set(INCLUDE_DIRECTORY src)
 
+cmake_print_variables(INCLUDE_DIRECTORY)
+cmake_print_variables(SOURCE_DIRECTORY)
+cmake_print_variables(TEST_DIRECTORY)
+cmake_print_variables(TEST_FILE_PREFIX)
+
 # Collect a list of all the test files in the test directory.
 set(ABSOLUTE_TEST_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/${TEST_DIRECTORY})
 file(GLOB_RECURSE TEST_FILES RELATIVE ${ABSOLUTE_TEST_DIRECTORY_PATH} ${TEST_DIRECTORY}/${TEST_FILE_PREFIX}*)
-message ("TEST FILES: ${TEST_FILES}")
-message("${CMAKE_SOURCE_DIR}")
+
+# Log the test files that were found.
+message("")
+message ("Discovered test files")
+foreach(f ${TEST_FILES})
+    message("    " ${f})
+endforeach ()
+message("")
 
 # Add a new executable and test for each test file discovered.
 # TODO: Skip source files that don't exist.
 foreach (TEST_FILE ${TEST_FILES})
-    message("Discovered test file: ${TEST_FILE}")
 
     # Remove the test filename prefix to get the path to the corresponding source file.
     string(REGEX REPLACE ${TEST_FILE_PREFIX} "" SOURCE_FILE_PATH ${TEST_FILE})
