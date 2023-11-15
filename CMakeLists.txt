@@ -36,8 +36,6 @@ message ("TEST FILES: ${TEST_FILES}")
 message("${CMAKE_SOURCE_DIR}")
 
 # Add a new executable and test for each test file discovered.
-# TODO: Handle nested folders.
-# TODO: Include unity for testing.
 # TODO: Skip source files that don't exist.
 foreach (TEST_FILE ${TEST_FILES})
     message("Discovered test file: ${TEST_FILE}")
