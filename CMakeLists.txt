@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.22)
-project(c_example C)
+project(ctest-unity-example C)
 
 set(CMAKE_C_STANDARD 11)
 
 include(CMakePrintHelpers)
 
-add_executable(c_example src/main.c
+# Todo: Glob for source files in source and include folders.
+add_executable(ctest-unity-example src/main.c
         src/module_1.c src/module_2.c src/module_folder/module.c src/module_folder/module.h)
 
 # Download and make the Unit test framework available.
