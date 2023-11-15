@@ -58,7 +58,13 @@ foreach (TEST_FILE ${TEST_FILES})
     string(REGEX REPLACE "/" "-" MODULE_TEST_NAME ${MODULE_PATH})
 
     # Create a new executable binary for each module test.
-    add_executable(${MODULE_TEST_NAME} test/${TEST_FILE} src/${SOURCE_FILE})
+    if(EXISTS ${PROJECT_SOURCE_DIR}/src/${SOURCE_FILE})
+        add_executable(${MODULE_TEST_NAME} test/${TEST_FILE} src/${SOURCE_FILE})
+        message("source file exists")
+    else()
+        add_executable(${MODULE_TEST_NAME} test/${TEST_FILE})
+        message("source file does not exist")
+    endif()
 
     # Include files from the include directory.
     target_include_directories(${MODULE_TEST_NAME} PRIVATE ${INCLUDE_DIRECTORY})
