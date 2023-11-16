@@ -5,9 +5,20 @@ set(CMAKE_C_STANDARD 11)
 
 include(CMakePrintHelpers)
 
-# Todo: Glob for source files in source and include folders.
-add_executable(ctest-unity-example src/main.c
-        src/module_1.c src/module_2.c src/module_folder/module.c src/module_folder/module.h)
+set(TEST_DIRECTORY test)
+set(TEST_FILE_PREFIX test_)
+set(SOURCE_DIRECTORY src)
+set(INCLUDE_DIRECTORY src)
+
+cmake_print_variables(INCLUDE_DIRECTORY)
+cmake_print_variables(SOURCE_DIRECTORY)
+cmake_print_variables(TEST_DIRECTORY)
+cmake_print_variables(TEST_FILE_PREFIX)
+
+# Collect a list of all the source files in the source directory.
+set(ABSOLUTE_SOURCE_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/${SOURCE_DIRECTORY})
+file(GLOB_RECURSE SOURCE_FILES ${SOURCE_DIRECTORY}/*)
+add_executable(ctest-unity-example ${SOURCE_FILES})
 
 # Download and make the Unit test framework available.
 include(FetchContent)
@@ -26,16 +37,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(fff)
 
 enable_testing()
-
-set(TEST_DIRECTORY test)
-set(TEST_FILE_PREFIX test_)
-set(SOURCE_DIRECTORY src)
-set(INCLUDE_DIRECTORY src)
-
-cmake_print_variables(INCLUDE_DIRECTORY)
-cmake_print_variables(SOURCE_DIRECTORY)
-cmake_print_variables(TEST_DIRECTORY)
-cmake_print_variables(TEST_FILE_PREFIX)
 
 # Collect a list of all the test files in the test directory.
 set(ABSOLUTE_TEST_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/${TEST_DIRECTORY})
